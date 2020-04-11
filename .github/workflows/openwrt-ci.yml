@@ -10,25 +10,24 @@
 name: OpenWrt-CI
 
 on:
-  #schedule:
-  #  - cron: 0 20 * * *
+  schedule:
+    - cron: 0 20 * * *
+    
+    
   push:
-    branches: 
-      - master
-
+    tags:
+      - '*'
 
 jobs:
 
   build_openwrt:
 
     name: Build OpenWrt and release
-   # runs-on: ubuntu-18.04
-    runs-on: ubuntu-latest
-   # if: github.event.repository.owner.id == github.event.sender.id
+    runs-on: ubuntu-18.04
 
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           ref: master
 
@@ -414,8 +413,7 @@ jobs:
         run: |
           make download -j8
           find dl -size -1024c -exec rm -f {} \;
-          df -h
-          
+
       - name: Compile firmware
         run: |
           make -j$(nproc) || make -j1 V=s
@@ -447,7 +445,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           draft: false
-          prerelease: false
+          prerelease: false      
 
       - name: Upload release asset
         if: github.event == 'push'
