@@ -10,24 +10,25 @@
 name: OpenWrt-CI
 
 on:
-  schedule:
-    - cron: 0 20 * * *
+  #schedule:
+  #  - cron: 0 20 * * *
   push:
-    tags:
-      - '*'
+    branches: 
+      - master
+
 
 jobs:
 
   build_openwrt:
 
     name: Build OpenWrt and release
-    runs-on: ubuntu-18.04
-   # runs-on: ubuntu-latest
+   # runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
    # if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
         with:
           ref: master
 
